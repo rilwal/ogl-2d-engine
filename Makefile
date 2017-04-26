@@ -10,18 +10,13 @@ obj_files = $(patsubst src/%.cpp,obj/%.o,$(source_files))
 
 
 $(build_dir)/game: $(obj_files)
+	mkdir -p $(build_dir)
 	clang++ $(compiler_libs) -o $@ $^
 
-
 obj/%.o: src/%.cpp
+	mkdir -p obj
 	g++ $(compiler_flags) -c -o $@ $<
 
-all:
-	clang++ -lGL -lglfw -lGLEW -g --std=c++14 -o game $(source_files) -Wall
+run: $(build_dir)/game
+	$(build_dir)/game
 
-production:
-	clang++ -lSDL2 -g --std=c++14 -o renderer-production main.cpp -O3
-	./renderer-production
-
-run: all
-	./game
